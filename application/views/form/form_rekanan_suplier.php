@@ -216,7 +216,7 @@
 
                         <div class="mb-3">
                             <label class="form-label"><?= translate('Nomor Rekening'); ?> <span class="text-danger">*</span></label>
-                            <input type="number name=" account_number" id="account_number" value="<?= cek_value(safe_array($main, 'account_number')); ?>" class="form-control" required>
+                            <input type="number" name="account_number" id="account_number" value="<?= cek_value(safe_array($main, 'account_number')); ?>" class="form-control" required>
                         </div>
 
                         <div class="mb-3">
