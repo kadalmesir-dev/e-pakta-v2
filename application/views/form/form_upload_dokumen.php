@@ -246,9 +246,9 @@
 
 
                         <div class="form-group d-flex align-items-center justify-content-end gap-8">
-                            <a href="<?= base_url('form/form_persyaratan') ?>" class="btn btn-warning-500 border-neutral-100 px-32">
+                            <!-- <a href="<?= base_url('form/form_persyaratan') ?>" class="btn btn-warning-500 border-neutral-100 px-32">
                                 Next Page <i class="fas fa-arrow-right"></i>
-                            </a>
+                            </a> -->
                             <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pdfModal">
                                 Download Document
                             </button> -->
@@ -261,3 +261,86 @@
         </div>
     </div>
 </div>
+
+
+<?php
+$flash_type = '';
+$flash_msg = '';
+
+// Tangkap flashdata
+if ($this->session->flashdata('success_message')) {
+  $flash_type = 'success';
+  $flash_msg = $this->session->flashdata('success_message');
+} elseif ($this->session->flashdata('error_message')) {
+  $flash_type = 'error';
+  $flash_msg = $this->session->flashdata('error_message');
+} elseif ($this->session->flashdata('error')) { // dari model pakai set_flashdata('error')
+  $flash_type = 'error';
+  $flash_msg = $this->session->flashdata('error');
+}
+?>
+
+<?php if ($flash_type && $flash_msg) : ?>
+  <!-- SweetAlert2 style toast custom -->
+  <style>
+    .swal2-container .swal2-popup.swal2-toast {
+      font-size: 0.9rem !important;
+      padding: 0.75em 1em !important;
+      width: auto !important;
+      max-width: 280px !important;
+      background-color: <?= $flash_type === 'success' ? '#28a745' : '#db3545' ?> !important;
+      color: #fff !important;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.2) !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+
+    .swal2-container .swal2-popup.swal2-toast .swal2-title {
+      margin: 0 !important;
+      padding: 0 !important;
+      font-size: 1em !important;
+      color: #fff !important;
+    }
+
+    .swal2-container .swal2-popup.swal2-toast .swal2-icon {
+      margin: 0 0.6em 0 0 !important;
+      transform: scale(0.9);
+    }
+
+    .swal2-icon.swal2-success,
+    .swal2-icon.swal2-error {
+      border-color: #fff !important;
+    }
+
+    .swal2-icon.swal2-success [class^="swal2-success-line"],
+    .swal2-icon.swal2-error [class^="swal2-x-mark-line"] {
+      background-color: #fff !important;
+    }
+
+    .swal2-icon.swal2-success .swal2-success-ring {
+      border: 0.25em solid rgba(255, 255, 255, 0.5) !important;
+    }
+
+    .swal2-container .swal2-popup.swal2-toast .swal2-icon-content {
+      color: #fff !important;
+    }
+  </style>
+
+  <!-- SweetAlert2 Toast -->
+  <script>
+    Swal.fire({
+      toast: true,
+      icon: '<?= $flash_type ?>',
+      title: '<?= addslashes($flash_msg) ?>',
+      position: 'top-end',
+      iconColor: '#fff',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+      }
+    });
+  </script>
+<?php endif; ?>

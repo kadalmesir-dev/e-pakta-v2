@@ -59,7 +59,7 @@ class M_form_rekanan_suplier extends CI_Model
 
     // === 2. FORM DOKUMEN UPLOAD ===
 
-    public function save_form_dokumen_upload()
+   public function save_form_dokumen_upload()
     {
         $this->load->library('Azure_blob');
 
@@ -73,6 +73,17 @@ class M_form_rekanan_suplier extends CI_Model
         $this->db->where('id_perusahaan', $d['id_perusahaan']);
         $query = $this->db->get('Epakta_upload_document');
         $existing_data = $query->row_array(); // bisa null kalau insert
+
+        // Cek file
+        if (
+            (empty($_FILES['code_of_conduct_document']['name']) && empty($existing_data['code_of_conduct_document'])) ||
+            (empty($_FILES['social_compliance_document']['name']) && empty($existing_data['social_compliance_document'])) ||
+            (empty($_FILES['upload_nib']['name']) && empty($existing_data['upload_nib']))
+        ) {
+          $this->session->set_flashdata('error', "Dokumen 'Code of Conduct', 'Social Compliance',dan 'NIB' wajib diunggah.");
+          redirect($_SERVER['HTTP_REFERER']);
+
+        }
 
         foreach ($file_fields as $field) {
             if (!empty($_FILES[$field]['name'])) {
